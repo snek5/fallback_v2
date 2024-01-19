@@ -4,9 +4,12 @@ const FileInput = ({ onFileChange, fileUploaded }) => {
     return (
         <>
             { fileUploaded ? 
-                <span>✔️ File Uploaded</span> 
+                <span
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white justify-center items-center text-center"
+                >✔️ File Uploaded
+                </span> 
                 : <input
-                className="block text-sm outline-bibdpurple text-bibdpurple border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-bibdpurple dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                className="px-4 py-2 w-fullblock w-full text-sm text-gray-900 border border-bibdpurple rounded-lg cursor-pointer mb-2 bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                 type="file" 
                 accept=".csv" 
                 onChange={(e) => onFileChange(e.target.files[0])}

@@ -49,19 +49,13 @@ function App() {
       lineDelay,
       setRandomLine,
       setPickedLines,
-      setFileHeaders
+      setFileHeaders,
+      pickedLines,
+      fileHeaders
     });
-    downloadSelectedLines({ fileHeaders, pickedLines});
+
+    downloadSelectedLines(fileHeaders, pickedLines);
   };
-
-  // const handleDownloadSelectedLines = () => {
-  //   downloadSelectedLines(fileHeaders, pickedLines);
-  // };
-
-  // const twoFunc = async () => {
-  //   await handlePickWinners();
-  //   handleDownloadSelectedLines();
-  // }
 
   return (
     <>

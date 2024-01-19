@@ -91,15 +91,23 @@ const pickWinners = ({
               setPickedLines((prevLines) => [...prevLines, randomLines[i]]);
             }, i * lineDelay * 1000);
           }        
+        
+        downloadSelectedLines(fileHeaders, pickedLines)
     };
 
     reader.readAsText(fileInput);
-    downloadSelectedLines(fileHeaders, pickedLines)
-
+ 
+    // return new Promise((resolve) => {
+    //     setTimeout(() => {
+    //         resolve();
+    //     }, pickedLines.length * lineDelay * 1000)
+    // })
 };
 
 const downloadSelectedLines = (fileHeaders, pickedLines) => {
-    const linesText = [...fileHeaders,...pickedLines].join('\n');
+    const fileHeader = fileHeaders.join('|')
+    console.log(fileHeader)
+    const linesText = [fileHeader,...pickedLines].join('\n');
     const blob = new Blob([linesText], { type: 'text/plain' });
   
     const downloadLink = document.createElement("a");
