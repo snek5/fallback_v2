@@ -4,8 +4,9 @@ import FileInput from './components/FileInput'
 import WinnersInput from './components/WinnersInput'
 import DelayInput from './components/DelayInput'
 import SubmitButton from './components/SubmitButton'
-import { pickWinners, downloadSelectedLines } from './components/helpers'
 import DrawWinners from './components/DrawWinners'
+import KeydownComponent from './components/KeyDownComponent'
+import { pickWinners, downloadSelectedLines } from './components/helpers'
 import './App.css'
 
 function App() {
@@ -53,17 +54,22 @@ function App() {
       pickedLines,
       fileHeaders
     });
-
-    downloadSelectedLines(fileHeaders, pickedLines);
   };
+
+  const handleDownload = () => {
+    downloadSelectedLines(
+      fileHeaders,
+      pickedLines
+    )
+  }
 
   return (
     <>
       <div
       className='mt-4 px-4 mx-auto flex flex-col justify-center items-center'>
-        <Headers />
         { !isFormSubmitted && (
           <>
+            <Headers />
             <FileInput 
             onFileChange={handleFileChange} 
             fileUploaded={fileUploaded} 
@@ -96,6 +102,9 @@ function App() {
             <DrawWinners
             handleDraw={handlePickWinners} 
             randomLine={randomLine}
+            />
+            <KeydownComponent
+            downloadLines={handleDownload}
             />
           </>
         )}

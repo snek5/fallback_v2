@@ -13,6 +13,7 @@ const pickWinners = ({
 }) => {
     if (!fileInput) {
         alert('Please choose a CSV file.');
+        return;
     }
 
     const reader = new FileReader();
@@ -24,7 +25,8 @@ const pickWinners = ({
         
         setFileHeaders(headers);
 
-        const rngSeed = Date.now();
+        // const rngSeed = Date.now();
+        const rngSeed = "testing"
         const rng = seedrandom(rngSeed);
 
         const getRandomIndex = (max) => Math.floor(rng() * max);
@@ -39,6 +41,7 @@ const pickWinners = ({
 
         if (chanceIndex === -1) {
             alert('CSV file is missing the "FINAL_CHANCES" column.')
+            return;
         }
 
         let cumulativeSum = 0;
@@ -83,39 +86,33 @@ const pickWinners = ({
 
         for (let i = 0; i < randomLines.length; i++) {
             setTimeout(() => {
-              const randomLineData = randomLines[i].split('|');
-              const name = randomLineData[headers.indexOf('ACNAME')].trim();
-              const certificate = randomLineData[headers.indexOf('ACCTNO_RAW')].trim();
-      
-              setRandomLine((prevRandomLine) => `${prevRandomLine}Certificate: ${certificate}\n`);
-              setPickedLines((prevLines) => [...prevLines, randomLines[i]]);
+                const randomLineData = randomLines[i].split('|');
+                const name = randomLineData[headers.indexOf('ACNAME')].trim();
+                const certificate = randomLineData[headers.indexOf('ACCTNO')].trim();
+                
+                randomLineData.push(`W${i + 1}: ${certificate}`);
+                setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n`]);
+                setPickedLines((prevLines) => [...prevLines, randomLines[i]]);
             }, i * lineDelay * 1000);
-          }        
+        }        
         
         downloadSelectedLines(fileHeaders, pickedLines)
     };
 
     reader.readAsText(fileInput);
- 
-    // return new Promise((resolve) => {
-    //     setTimeout(() => {
-    //         resolve();
-    //     }, pickedLines.length * lineDelay * 1000)
-    // })
 };
 
 const downloadSelectedLines = (fileHeaders, pickedLines) => {
-    const fileHeader = fileHeaders.join('|')
-    console.log(fileHeader)
-    const linesText = [fileHeader,...pickedLines].join('\n');
+    const fileHeader = fileHeaders.join('|');
+    const linesText = [fileHeader, ...pickedLines].join('\n');
     const blob = new Blob([linesText], { type: 'text/plain' });
-  
+
     const downloadLink = document.createElement("a");
     downloadLink.href = URL.createObjectURL(blob);
     downloadLink.download = "selected_lines.csv";
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-  };
+};
 
-  export { pickWinners, downloadSelectedLines };
+export { pickWinners, downloadSelectedLines };
