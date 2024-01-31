@@ -30,7 +30,7 @@ function App() {
   const handleFileChange = (file) => {
     setFileInput(file);
     setFileUploaded(true);
-    hashFile(file, setHashedValue);
+    hashFile(file, setHashedValue, setRngSeed);
   };
 
   const handlePerdanaWinnersChange = (value) => {
@@ -56,7 +56,8 @@ function App() {
       setPickedLines,
       setFileHeaders,
       pickedLines,
-      fileHeaders
+      fileHeaders,
+      rngSeed
     });
   };
 
@@ -78,6 +79,7 @@ function App() {
             onFileChange={handleFileChange} 
             fileUploaded={fileUploaded}
             hashedValue={hashedValue}
+            rngSeed={rngSeed}
             hashFile={hashFile} 
             />
             <WinnersInput

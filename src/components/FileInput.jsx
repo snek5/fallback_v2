@@ -1,6 +1,6 @@
 import React from "react";
 
-const FileInput = ({ onFileChange, fileUploaded, hashedValue, hashFile }) => {
+const FileInput = ({ onFileChange, fileUploaded, hashedValue, rngSeed, hashFile }) => {
     return (
       <>
         {fileUploaded ? (
@@ -12,6 +12,9 @@ const FileInput = ({ onFileChange, fileUploaded, hashedValue, hashFile }) => {
             </span>
             <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white justify-center items-center text-center">
               🔒 Hashed Value: {hashedValue}
+            </span>
+            <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white justify-center items-center text-center">
+                RNG Seed: {rngSeed}
             </span>
           </>
         ) : (

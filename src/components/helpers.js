@@ -10,7 +10,8 @@ const pickWinners = ({
     setPickedLines,
     setFileHeaders,
     pickedLines,
-    fileHeaders
+    fileHeaders,
+    rngSeed
 }) => {
     if (!fileInput) {
         alert('Please choose a CSV file.');
@@ -27,7 +28,8 @@ const pickWinners = ({
         setFileHeaders(headers);
 
         // const rngSeed = Date.now();
-        const rngSeed = "testing"
+        console.log(`Seed Value: ${rngSeed}`);
+        // const rngSeed = "testing"
         const rng = seedrandom(rngSeed);
 
         const getRandomIndex = (max) => Math.floor(rng() * max);
@@ -116,14 +118,20 @@ const downloadSelectedLines = (fileHeaders, pickedLines) => {
     document.body.removeChild(downloadLink);
 };
 
-const hashFile = (fileInput, setHashedValue) => {
+const hashFile = (fileInput, setHashedValue, setRngSeed) => {
     const fileReader = new FileReader();
     fileReader.onload = () => {
         const fileArrayBuffer = fileReader.result;
         const hashUint8Array = cryptoJs.SHA256(fileArrayBuffer);
         const hashedValueHex = hashUint8Array.toString(cryptoJs.enc.Hex);
         setHashedValue(hashedValueHex);
-        console.log(`Hashed file value: ${hashedValueHex}`);
+        // const randomBuffer = crypto.randomBytes(16);
+        // const randomString = randomBuffer.toString('hex');
+        const dateString = new Date().toISOString().slice(0, 19).replace(/[-T:]/g, '');;
+        const rngSeed = dateString;
+        setRngSeed(rngSeed);
+        console.log(`RNG Seed: ${rngSeed}`);
+        console.log(`Hashed File Value: ${hashedValueHex}`);
     };
     fileReader.readAsArrayBuffer(fileInput)
 }
