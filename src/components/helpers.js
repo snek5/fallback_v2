@@ -105,9 +105,10 @@ const pickWinners = ({
     reader.readAsText(fileInput);
 };
 
-const downloadSelectedLines = (fileHeaders, pickedLines) => {
+const downloadSelectedLines = (fileHeaders, pickedLines, rngSeed, HashedValue) => {
+    const finalLine = `RNG Seed = ${rngSeed} | File Hash = ${HashedValue}`
     const fileHeader = fileHeaders.join('|');
-    const linesText = [fileHeader, ...pickedLines].join('\n');
+    const linesText = [fileHeader, ...pickedLines,finalLine].join('\n');
     const blob = new Blob([linesText], { type: 'text/plain' });
 
     const downloadLink = document.createElement("a");

@@ -64,7 +64,9 @@ function App() {
   const handleDownload = () => {
     downloadSelectedLines(
       fileHeaders,
-      pickedLines
+      pickedLines,
+      rngSeed,
+      hashedValue
     )
   }
 
