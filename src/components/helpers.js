@@ -1,4 +1,5 @@
 import seedrandom from "seedrandom";
+import cryptoJs from "crypto-js";
 
 const pickWinners = ({
     fileInput,
@@ -115,4 +116,16 @@ const downloadSelectedLines = (fileHeaders, pickedLines) => {
     document.body.removeChild(downloadLink);
 };
 
-export { pickWinners, downloadSelectedLines };
+const hashFile = (fileInput, setHashedValue) => {
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+        const fileArrayBuffer = fileReader.result;
+        const hashUint8Array = cryptoJs.SHA256(fileArrayBuffer);
+        const hashedValueHex = hashUint8Array.toString(cryptoJs.enc.Hex);
+        setHashedValue(hashedValueHex);
+        console.log(`Hashed file value: ${hashedValueHex}`);
+    };
+    fileReader.readAsArrayBuffer(fileInput)
+}
+
+export { pickWinners, downloadSelectedLines, hashFile };

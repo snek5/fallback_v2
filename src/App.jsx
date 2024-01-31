@@ -6,7 +6,7 @@ import DelayInput from './components/DelayInput'
 import SubmitButton from './components/SubmitButton'
 import DrawWinners from './components/DrawWinners'
 import KeydownComponent from './components/KeyDownComponent'
-import { pickWinners, downloadSelectedLines } from './components/helpers'
+import { pickWinners, downloadSelectedLines, hashFile } from './components/helpers'
 import './App.css'
 
 function App() {
@@ -19,6 +19,9 @@ function App() {
   const [randomLine, setRandomLine] = useState('');
   const [pickedLines, setPickedLines] = useState([]);
   const [fileHeaders, setFileHeaders] = useState(null);
+  const [hashedValue, setHashedValue] = useState("");
+  const [rngSeed, setRngSeed]=useState("");
+
 
   const handleFormSubmitted = () => {
     setFormSubmitted(true)
@@ -27,6 +30,7 @@ function App() {
   const handleFileChange = (file) => {
     setFileInput(file);
     setFileUploaded(true);
+    hashFile(file, setHashedValue);
   };
 
   const handlePerdanaWinnersChange = (value) => {
@@ -72,7 +76,9 @@ function App() {
             <Headers />
             <FileInput 
             onFileChange={handleFileChange} 
-            fileUploaded={fileUploaded} 
+            fileUploaded={fileUploaded}
+            hashedValue={hashedValue}
+            hashFile={hashFile} 
             />
             <WinnersInput
             label="Number of Perdana Winners:"
