@@ -6,6 +6,7 @@ import DelayInput from './components/DelayInput'
 import SubmitButton from './components/SubmitButton'
 import DrawWinners from './components/DrawWinners'
 import KeydownComponent from './components/KeyDownComponent'
+import SeedInput from './components/SeedInput'
 import { pickWinners, downloadSelectedLines, hashFile } from './components/helpers'
 import './App.css'
 
@@ -45,6 +46,9 @@ function App() {
     setLineDelay(parseInt(value));
   }
 
+  const handleSeedChange = (value) => {
+    setRngSeed(value);
+  }
 
   const handlePickWinners = () => {
     pickWinners({
@@ -82,6 +86,11 @@ function App() {
             rngSeed={rngSeed}
             hashFile={hashFile} 
             />
+            <SeedInput
+            rngSeed={rngSeed}
+            value = {rngSeed}
+            onChange={handleSeedChange}
+            /> 
             <WinnersInput
             label="Number of Perdana Winners:"
             value={perdanaWinners}

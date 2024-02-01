@@ -26,6 +26,7 @@ const pickWinners = ({
         setFileHeaders(headers);
 
         const rng = seedrandom(rngSeed);
+        console.log(`RNG Seed Value used : `);
 
         const getRandomIndex = (max) => Math.floor(rng() * max);
 
