@@ -145,5 +145,87 @@ const hashFile = (file, setHashedValue, setRngSeed) => {
   fileReader.readAsArrayBuffer(file);
 };
 
+const pickStaff = ({
+    fileInput,
+    staffWinners,
+    lineDelay,
+    setRandomLine,
+    setPickedLines,
+    setFileHeaders,
+    rngSeed
+  }) => {
+    if (!fileInput) {
+      alert('Please choose a CSV file.');
+      return;
+    }
+  
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target.result;
+      const lines = content.split('\n');
+      const headers = lines[0].split('|').map((header) => header.trim());
+      const data = lines.slice(1);
+  
+      setFileHeaders(headers);
+  
+      const rng = seedrandom(rngSeed);
+      console.log(`RNG Seed Value used : `);
+  
+      const getRandomIndex = (max) => Math.floor(rng() * max);
+  
+      const staffFlagIndex = headers.indexOf('STAFF_FLAG');
+  
+      if (staffFlagIndex === -1) {
+        alert('CSV file is missing the "STAFF_FLAG" column.');
+        return;
+      }
+  
+      let cumulativeSum = 0;
+      const cumulativeChances = data.map((line) => {
+        const lineData = line.split('|');
+        if (lineData.length > staffFlagIndex && lineData[staffFlagIndex].trim() === 'Y') {
+          const chanceValue = 1; // Assuming each staff member has an equal chance (adjust if needed)
+          cumulativeSum += chanceValue;
+          return cumulativeSum;
+        }
+        return 0;
+      });
+  
+      const totalCumulativeSum = cumulativeSum;
+  
+      const randomLines = [];
+  
+      for (let i = 0; i < staffWinners; i++) {
+        let randomIndex, randomLineData;
+        const randomValue = rng() * totalCumulativeSum;
+        randomIndex = cumulativeChances.findIndex(
+          (cumulativeChances, index) => cumulativeChances >= randomValue && data[index].split('|')[staffFlagIndex].trim() === 'Y'
+        );
+        randomLineData = data[randomIndex].split('|');
+        randomLines.push(data[randomIndex]);
+        data.splice(randomIndex, 1); // Remove the picked line from the data array
+        cumulativeSum -= 1; // Assuming each staff member has an equal chance
+        cumulativeChances.splice(randomIndex, 1); // Remove the picked line from the cumulativeChances array
+      }
+  
+      randomLines.sort(() => rng() - 0.5);
+  
+      for (let i = 0; i < randomLines.length; i++) {
+        setTimeout(() => {
+          const randomLineData = randomLines[i].split('|');
+          const name = randomLineData[headers.indexOf('ACNAME')].trim();
+          const certificate = randomLineData[headers.indexOf('ACCTNO')].trim();
+          
+          randomLineData.push(`W${i + 1}: ${certificate}`);
+          setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n${certificate}`]);
+          setPickedLines((prevLines) => [...prevLines, randomLines[i]]);
+        }, i * lineDelay * 1000);
+      }
+      
+      // downloadSelectedLines(fileHeaders, pickedLines)
+    };
+  
+    reader.readAsText(fileInput);
+  };
 
-export { pickWinners, downloadSelectedLines, hashFile };
+export { pickWinners, pickStaff, downloadSelectedLines, hashFile };

@@ -7,7 +7,7 @@ import SubmitButton from './components/SubmitButton'
 import DrawWinners from './components/DrawWinners'
 import KeydownComponent from './components/KeyDownComponent'
 import SeedInput from './components/SeedInput'
-import { pickWinners, downloadSelectedLines, hashFile } from './components/helpers'
+import { pickWinners, downloadSelectedLines, pickStaff, hashFile } from './components/helpers'
 import './App.css'
 
 function App() {
@@ -16,14 +16,15 @@ function App() {
   const [fileInput, setFileInput] = useState(null);
   const [perdanaWinners, setPerdanaWinners] = useState(0);
   const [nonPerdanaWinners, setNonPerdanaWinners] = useState(0);
+  const [staffWinners, setStaffWinners] = useState(0);
   const [lineDelay, setLineDelay] = useState(0);
   const [randomLine, setRandomLine] = useState('');
   const [pickedLines, setPickedLines] = useState([]);
   const [fileHeaders, setFileHeaders] = useState(null);
   const [hashedValue, setHashedValue] = useState("");
-  const [rngSeed, setRngSeed]=useState("");
-
-
+  const [rngSeed, setRngSeed] = useState("");
+  const [staffDraw, setStaffDraw] = useState(false);
+  
   const handleFormSubmitted = () => {
     setFormSubmitted(true)
   };
@@ -62,6 +63,18 @@ function App() {
     });
   };
 
+  const handlePickStaff = () => {
+    pickStaff({
+      fileInput,
+      staffWinners,
+      lineDelay,
+      setRandomLine,
+      setPickedLines,
+      setFileHeaders,
+      rngSeed
+    })
+  }
+
   const handleDownload = () => {
     downloadSelectedLines(
       fileHeaders,
@@ -73,6 +86,14 @@ function App() {
 
   const handleHashing = (file) => {
     hashFile(file, setHashedValue, setRngSeed)
+  }
+
+  const handleStaffDraw = () => {
+    setStaffDraw(!staffDraw)
+  }
+
+  const handleStaffWinnerChange = (value) => {
+    setStaffWinners(parseInt(value));
   }
 
   return (
@@ -93,7 +114,17 @@ function App() {
             rngSeed={rngSeed}
             value = {rngSeed}
             onChange={handleSeedChange}
-            /> 
+            />
+          <label>
+          <input
+            type="checkbox"
+            checked={staffDraw}
+            onChange={handleStaffDraw}
+          />
+             Staff Draw
+          </label>
+            { !staffDraw ?
+            (<>
             <WinnersInput
             label="Number of Perdana Winners:"
             value={perdanaWinners}
@@ -115,12 +146,34 @@ function App() {
             nonPerdanaWinners={nonPerdanaWinners}
             lineDelay={lineDelay}
             />
+            </>)
+            :
+            (
+            <>  
+            <WinnersInput
+            label="Number of Staff Winners:"
+            value={staffWinners}
+            onChange={handleStaffWinnerChange}
+            />
+            <DelayInput
+            value={lineDelay}
+            onChange={handleLineDelayChange}
+            />
+            <SubmitButton
+            handleFormSubmitted={handleFormSubmitted}
+            fileInput={fileInput}
+            staffWinners={staffWinners}
+            lineDelay={lineDelay}
+            />
+            </>
+            )
+            }
           </>
         )}
         { isFormSubmitted && (
           <>
             <DrawWinners
-            handleDraw={handlePickWinners} 
+            handleDraw={ !staffDraw ? handlePickWinners : handlePickStaff} 
             randomLine={randomLine}
             />
             <KeydownComponent
