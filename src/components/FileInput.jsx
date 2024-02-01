@@ -1,6 +1,6 @@
 import React from "react";
 
-const FileInput = ({ onFileChange, fileUploaded, hashedValue, rngSeed, hashFile }) => {
+const FileInput = ({ onFileChange, handleHashing, fileUploaded, hashedValue, rngSeed}) => {
     return (
       <>
         {fileUploaded ? (
@@ -24,7 +24,7 @@ const FileInput = ({ onFileChange, fileUploaded, hashedValue, rngSeed, hashFile 
             accept=".csv"
             onChange={(e) => {
               onFileChange(e.target.files[0]);
-              hashFile(e.target.files[0]);
+              handleHashing(e.target.files[0]);
             }}
           />
         )}

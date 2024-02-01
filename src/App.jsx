@@ -31,7 +31,6 @@ function App() {
   const handleFileChange = (file) => {
     setFileInput(file);
     setFileUploaded(true);
-    hashFile(file, setHashedValue, setRngSeed);
   };
 
   const handlePerdanaWinnersChange = (value) => {
@@ -72,6 +71,10 @@ function App() {
     )
   }
 
+  const handleHashing = (file) => {
+    hashFile(file, setHashedValue, setRngSeed)
+  }
+
   return (
     <>
       <div
@@ -84,7 +87,7 @@ function App() {
             fileUploaded={fileUploaded}
             hashedValue={hashedValue}
             rngSeed={rngSeed}
-            hashFile={hashFile} 
+            handleHashing={handleHashing}
             />
             <SeedInput
             rngSeed={rngSeed}

@@ -121,22 +121,29 @@ const downloadSelectedLines = (fileHeaders, pickedLines, rngSeed, HashedValue) =
     document.body.removeChild(downloadLink);
 };
 
-const hashFile = (fileInput, setHashedValue, setRngSeed) => {
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-        const fileArrayBuffer = fileReader.result;
-        const hashUint8Array = cryptoJs.SHA256(fileArrayBuffer);
-        const hashedValueHex = hashUint8Array.toString(cryptoJs.enc.Hex);
-        setHashedValue(hashedValueHex);
-        // const randomBuffer = crypto.randomBytes(16);
-        // const randomString = randomBuffer.toString('hex');
-        const dateString = new Date().toISOString().slice(0, 19).replace(/[-T:]/g, '');;
-        const rngSeed = dateString;
-        setRngSeed(rngSeed);
-        console.log(`RNG Seed: ${rngSeed}`);
-        console.log(`Hashed File Value: ${hashedValueHex}`);
-    };
-    fileReader.readAsArrayBuffer(fileInput)
-}
+
+const hashFile = (file, setHashedValue, setRngSeed) => {
+  const fileReader = new FileReader();
+
+  fileReader.onload = () => {
+    const fileArrayBuffer = fileReader.result;
+    const hashUint8Array = cryptoJs.SHA256(cryptoJs.lib.WordArray.create(fileArrayBuffer));
+    const hashedValueHex = hashUint8Array.toString(cryptoJs.enc.Hex);
+
+    // Generate a unique RNG seed for each file
+    const randomBuffer = new Uint8Array(16);
+    crypto.getRandomValues(randomBuffer);
+    const rngSeed = Array.from(randomBuffer, (byte) => byte.toString(16)).join('');
+
+    setHashedValue(hashedValueHex);
+    setRngSeed(rngSeed);
+
+    console.log(`RNG Seed: ${rngSeed}`);
+    console.log(`Hashed File Value: ${hashedValueHex}`);
+  };
+
+  fileReader.readAsArrayBuffer(file);
+};
+
 
 export { pickWinners, downloadSelectedLines, hashFile };
