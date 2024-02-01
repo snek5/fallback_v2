@@ -9,8 +9,6 @@ const pickWinners = ({
     setRandomLine,
     setPickedLines,
     setFileHeaders,
-    pickedLines,
-    fileHeaders,
     rngSeed
 }) => {
     if (!fileInput) {
@@ -24,12 +22,9 @@ const pickWinners = ({
         const lines = content.split('\n');
         const headers = lines[0].split('|').map((header) => header.trim());
         const data = lines.slice(1);
-        
+
         setFileHeaders(headers);
 
-        // const rngSeed = Date.now();
-        console.log(`Seed Value: ${rngSeed}`);
-        // const rngSeed = "testing"
         const rng = seedrandom(rngSeed);
 
         const getRandomIndex = (max) => Math.floor(rng() * max);
@@ -73,16 +68,22 @@ const pickWinners = ({
             );
             randomLineData = data[randomIndex].split('|');
             randomLines.push(data[randomIndex]);
+            data.splice(randomIndex, 1); // Remove the picked line from the data array
+            cumulativeSum -= parseFloat(randomLineData[chanceIndex].trim()); // Reduce the cumulative sum
+            cumulativeChances.splice(randomIndex, 1); // Remove the picked line from the cumulativeChances array
         }
 
         for (let i = 0; i < nonPerdanaWinners; i++) {
             let randomIndex, randomLineData;
-            const randomValue = rng() * totalCumulativeSum;
+            const randomValue = rng() * cumulativeSum; // Use the updated cumulativeSum
             randomIndex = cumulativeChances.findIndex(
                 (cumulativeChances, index) => cumulativeChances >= randomValue && data[index].split('|')[perdanaIndex].trim() === 'N'
             );
             randomLineData = data[randomIndex].split('|');
             randomLines.push(data[randomIndex]);
+            data.splice(randomIndex, 1); // Remove the picked line from the data array
+            cumulativeSum -= parseFloat(randomLineData[chanceIndex].trim()); // Reduce the cumulative sum
+            cumulativeChances.splice(randomIndex, 1); // Remove the picked line from the cumulativeChances array
         }
 
         randomLines.sort(() => rng() - 0.5);
@@ -99,7 +100,7 @@ const pickWinners = ({
             }, i * lineDelay * 1000);
         }        
         
-        downloadSelectedLines(fileHeaders, pickedLines)
+        // downloadSelectedLines(fileHeaders, pickedLines)
     };
 
     reader.readAsText(fileInput);

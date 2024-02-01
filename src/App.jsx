@@ -55,8 +55,6 @@ function App() {
       setRandomLine,
       setPickedLines,
       setFileHeaders,
-      pickedLines,
-      fileHeaders,
       rngSeed
     });
   };
