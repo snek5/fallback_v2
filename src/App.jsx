@@ -24,7 +24,9 @@ function App() {
   const [hashedValue, setHashedValue] = useState("");
   const [rngSeed, setRngSeed] = useState("");
   const [staffDraw, setStaffDraw] = useState(false);
-  
+  const [showCertificate, setCertificate] = useState(false);
+  const [showName, setName] = useState(false);
+
   const handleFormSubmitted = () => {
     setFormSubmitted(true)
   };
@@ -59,7 +61,9 @@ function App() {
       setRandomLine,
       setPickedLines,
       setFileHeaders,
-      rngSeed
+      rngSeed,
+      showName,
+      showCertificate
     });
   };
 
@@ -71,7 +75,9 @@ function App() {
       setRandomLine,
       setPickedLines,
       setFileHeaders,
-      rngSeed
+      rngSeed,
+      showName,
+      showCertificate
     })
   }
 
@@ -96,88 +102,116 @@ function App() {
     setStaffWinners(parseInt(value));
   }
 
+  const handleCertificateDisplay = () => {
+    setCertificate(!showCertificate);
+    console.log(showCertificate);
+  }
+
+  const handleNameDisplay = () => {
+    setName(!showName);
+    console.log(showName);
+  }
+
   return (
     <>
       <div
-      className='mt-4 px-4 mx-auto flex flex-col justify-center items-center'>
-        { !isFormSubmitted && (
+        className='mt-4 px-4 mx-auto flex flex-col justify-center items-center'>
+        {!isFormSubmitted && (
           <>
             <Headers />
-            <FileInput 
-            onFileChange={handleFileChange} 
-            fileUploaded={fileUploaded}
-            hashedValue={hashedValue}
-            rngSeed={rngSeed}
-            handleHashing={handleHashing}
+            <FileInput
+              onFileChange={handleFileChange}
+              fileUploaded={fileUploaded}
+              hashedValue={hashedValue}
+              rngSeed={rngSeed}
+              handleHashing={handleHashing}
             />
             <SeedInput
-            rngSeed={rngSeed}
-            value = {rngSeed}
-            onChange={handleSeedChange}
+              rngSeed={rngSeed}
+              value={rngSeed}
+              onChange={handleSeedChange}
             />
-          <label>
-          <input
-            type="checkbox"
-            checked={staffDraw}
-            onChange={handleStaffDraw}
-          />
-             Staff Draw
-          </label>
-            { !staffDraw ?
-            (<>
-            <WinnersInput
-            label="Number of Perdana Winners:"
-            value={perdanaWinners}
-            onChange={handlePerdanaWinnersChange}
-            />
-            <WinnersInput
-            label="Number of Mass Market Winners:"
-            value={nonPerdanaWinners}
-            onChange={handleNonPerdanaWinnersChange}
-            />
-            <DelayInput
-            value={lineDelay}
-            onChange={handleLineDelayChange}
-            />
-            <SubmitButton
-            handleFormSubmitted={handleFormSubmitted}
-            fileInput={fileInput}
-            perdanaWinners={perdanaWinners}
-            nonPerdanaWinners={nonPerdanaWinners}
-            lineDelay={lineDelay}
-            />
-            </>)
-            :
-            (
-            <>  
-            <WinnersInput
-            label="Number of Staff Winners:"
-            value={staffWinners}
-            onChange={handleStaffWinnerChange}
-            />
-            <DelayInput
-            value={lineDelay}
-            onChange={handleLineDelayChange}
-            />
-            <SubmitButton
-            handleFormSubmitted={handleFormSubmitted}
-            fileInput={fileInput}
-            staffWinners={staffWinners}
-            lineDelay={lineDelay}
-            />
-            </>
-            )
+            <div class="flex-col mb-2 mt-2" id='draw-options'>
+              <div class="checkbox-wrapper-13 flex">
+                <input
+                  type="checkbox"
+                  checked={staffDraw}
+                  onChange={handleStaffDraw}
+                />
+                <label>Staff Draw</label>
+              </div>
+              <div class="checkbox-wrapper-13 flex">
+                <input
+                  type="checkbox"
+                  checked={showCertificate}
+                  onChange={handleCertificateDisplay}
+                />
+                <label>Show Certificate</label>
+              </div>
+              <div class="checkbox-wrapper-13 flex">
+                <input
+                  type="checkbox"
+                  checked={showName}
+                  onChange={handleNameDisplay}
+                />
+                <label for="c1-13"> Show Name</label>
+              </div>
+            </div>
+            {!staffDraw ?
+              (<>
+                <WinnersInput
+                  label="Number of Perdana Winners:"
+                  value={perdanaWinners}
+                  onChange={handlePerdanaWinnersChange}
+                />
+                <WinnersInput
+                  label="Number of Mass Market Winners:"
+                  value={nonPerdanaWinners}
+                  onChange={handleNonPerdanaWinnersChange}
+                />
+                <DelayInput
+                  value={lineDelay}
+                  onChange={handleLineDelayChange}
+                />
+                <SubmitButton
+                  handleFormSubmitted={handleFormSubmitted}
+                  fileInput={fileInput}
+                  perdanaWinners={perdanaWinners}
+                  nonPerdanaWinners={nonPerdanaWinners}
+                  lineDelay={lineDelay}
+                />
+              </>)
+              :
+              (
+                <>
+                  <WinnersInput
+                    label="Number of Staff Winners:"
+                    value={staffWinners}
+                    onChange={handleStaffWinnerChange}
+                  />
+                  <DelayInput
+                    value={lineDelay}
+                    onChange={handleLineDelayChange}
+                  />
+                  <SubmitButton
+                    handleFormSubmitted={handleFormSubmitted}
+                    fileInput={fileInput}
+                    staffWinners={staffWinners}
+                    lineDelay={lineDelay}
+                  />
+                </>
+              )
             }
           </>
         )}
-        { isFormSubmitted && (
+        {isFormSubmitted && (
           <>
             <DrawWinners
-            handleDraw={ !staffDraw ? handlePickWinners : handlePickStaff} 
-            randomLine={randomLine}
+              handleDraw={!staffDraw ? handlePickWinners : handlePickStaff}
+              randomLine={randomLine}
             />
             <KeydownComponent
-            downloadLines={handleDownload}
+              downloadLines={handleDownload}
             />
           </>
         )}

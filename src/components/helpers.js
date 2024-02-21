@@ -9,7 +9,9 @@ const pickWinners = ({
     setRandomLine,
     setPickedLines,
     setFileHeaders,
-    rngSeed
+    rngSeed,
+    showName,
+    showCertificate
 }) => {
     if (!fileInput) {
         alert('Please choose a CSV file.');
@@ -32,6 +34,7 @@ const pickWinners = ({
 
         const perdanaIndex = headers.indexOf('PERDANA_FLAG');
         const chanceIndex = headers.indexOf('FINAL_CHANCES');
+        const staffFlagIndex = headers.indexOf('STAFF_FLAG');
 
         if (perdanaIndex === -1) {
             alert('CSV file is missing the "PERDANA_FLAG" column.');
@@ -43,17 +46,22 @@ const pickWinners = ({
             return;
         }
 
+        if (staffFlagIndex === -1) {
+            alert('CSV file is missing the "STAFF_FLAG" column.')
+            return;
+        }
+
         let cumulativeSum = 0;
         const cumulativeChances = data.map((line) => {
             const lineData = line.split('|');
-            if (lineData.length > chanceIndex) {
+            if (lineData.length > chanceIndex && lineData[staffFlagIndex].trim() === 'N') {
                 const chanceValue = parseFloat(lineData[chanceIndex].trim());
                 if (!isNaN(chanceValue) && chanceValue >= 0) {
                     cumulativeSum += chanceValue;
                     return cumulativeSum;
                 }
             }
-
+            console.log(lineData);
             return 0;
         });
 
@@ -65,7 +73,7 @@ const pickWinners = ({
             let randomIndex, randomLineData;
             const randomValue = rng() * totalCumulativeSum;
             randomIndex = cumulativeChances.findIndex(
-                (cumulativeChances, index) => cumulativeChances >= randomValue && data[index].split('|')[perdanaIndex].trim() === 'Y'
+                (cumulativeChances, index) => cumulativeChances >= randomValue && data[index].split('|')[perdanaIndex].trim() === 'Y' && data[index].split('|')[staffFlagIndex].trim() === 'N'
             );
             randomLineData = data[randomIndex].split('|');
             randomLines.push(data[randomIndex]);
@@ -78,7 +86,7 @@ const pickWinners = ({
             let randomIndex, randomLineData;
             const randomValue = rng() * cumulativeSum; // Use the updated cumulativeSum
             randomIndex = cumulativeChances.findIndex(
-                (cumulativeChances, index) => cumulativeChances >= randomValue && data[index].split('|')[perdanaIndex].trim() === 'N'
+                (cumulativeChances, index) => cumulativeChances >= randomValue && data[index].split('|')[perdanaIndex].trim() === 'N' && data[index].split('|')[staffFlagIndex].trim() === 'N'
             );
             randomLineData = data[randomIndex].split('|');
             randomLines.push(data[randomIndex]);
@@ -96,7 +104,25 @@ const pickWinners = ({
                 const certificate = randomLineData[headers.indexOf('ACCTNO')].trim();
                 
                 randomLineData.push(`W${i + 1}: ${certificate}`);
-                setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n`]);
+                // choose to display cert, name or both.
+                switch (showCertificate != null && showName != null) {
+                  case (showCertificate && showName):
+                    console.log("case 1");
+                    setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n${certificate}`]);
+                    break;
+                  case showCertificate:
+                    console.log("case 2");
+                    setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${certificate}\n`]);
+                    break;
+                  case showName:
+                    console.log("case 3");
+                    setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n`]);
+                    break;
+                  default:
+                    console.log("case default");
+                    setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${certificate}\n`]);
+                    break;
+                }
                 setPickedLines((prevLines) => [...prevLines, randomLines[i]]);
             }, i * lineDelay * 1000);
         }        
@@ -152,7 +178,9 @@ const pickStaff = ({
     setRandomLine,
     setPickedLines,
     setFileHeaders,
-    rngSeed
+    rngSeed,
+    showName,
+    showCertificate
   }) => {
     if (!fileInput) {
       alert('Please choose a CSV file.');
@@ -217,7 +245,25 @@ const pickStaff = ({
           const certificate = randomLineData[headers.indexOf('ACCTNO')].trim();
           
           randomLineData.push(`W${i + 1}: ${certificate}`);
-          setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n${certificate}`]);
+          // choose to display cert, name or both.
+          switch (showCertificate != null && showName != null) {
+            case (showCertificate && showName):
+              console.log("case 1");
+              setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n${certificate}`]);
+              break;
+            case showCertificate:
+              console.log("case 2");
+              setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${certificate}\n`]);
+              break;
+            case showName:
+              console.log("case 3");
+              setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n`]);
+              break;
+            default:
+              console.log("case default");
+              setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n`]);
+              break;
+          }
           setPickedLines((prevLines) => [...prevLines, randomLines[i]]);
         }, i * lineDelay * 1000);
       }
