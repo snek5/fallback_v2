@@ -3,7 +3,7 @@ import React from "react";
 const SubmitButton = ({ handleFormSubmitted }) => {
     return (
         <>
-            <div id="submit" class="w-full mb-2">
+            <div id="submit" className="w-full mb-2">
                 <button
                     id="submit-btn"
                     onClick={handleFormSubmitted}

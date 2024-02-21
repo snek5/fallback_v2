@@ -61,7 +61,6 @@ const pickWinners = ({
                     return cumulativeSum;
                 }
             }
-            console.log(lineData);
             return 0;
         });
 
@@ -107,19 +106,15 @@ const pickWinners = ({
                 // choose to display cert, name or both.
                 switch (showCertificate != null && showName != null) {
                   case (showCertificate && showName):
-                    console.log("case 1");
                     setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n${certificate}`]);
                     break;
                   case showCertificate:
-                    console.log("case 2");
                     setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${certificate}\n`]);
                     break;
                   case showName:
-                    console.log("case 3");
                     setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n`]);
                     break;
                   default:
-                    console.log("case default");
                     setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${certificate}\n`]);
                     break;
                 }
@@ -248,19 +243,15 @@ const pickStaff = ({
           // choose to display cert, name or both.
           switch (showCertificate != null && showName != null) {
             case (showCertificate && showName):
-              console.log("case 1");
               setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n${certificate}`]);
               break;
             case showCertificate:
-              console.log("case 2");
               setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${certificate}\n`]);
               break;
             case showName:
-              console.log("case 3");
               setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n`]);
               break;
             default:
-              console.log("case default");
               setRandomLine((prevRandomLines) => [...prevRandomLines, `W${i + 1}: ${name}\n`]);
               break;
           }

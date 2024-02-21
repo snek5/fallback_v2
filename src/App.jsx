@@ -131,8 +131,8 @@ function App() {
               value={rngSeed}
               onChange={handleSeedChange}
             />
-            <div class="flex-col mb-2 mt-2" id='draw-options'>
-              <div class="checkbox-wrapper-13 flex">
+            <div className="flex-col mb-2 mt-2" id='draw-options'>
+              <div className="checkbox-wrapper-13 flex">
                 <input
                   type="checkbox"
                   checked={staffDraw}
@@ -140,7 +140,7 @@ function App() {
                 />
                 <label>Staff Draw</label>
               </div>
-              <div class="checkbox-wrapper-13 flex">
+              <div className="checkbox-wrapper-13 flex">
                 <input
                   type="checkbox"
                   checked={showCertificate}
@@ -148,13 +148,13 @@ function App() {
                 />
                 <label>Show Certificate</label>
               </div>
-              <div class="checkbox-wrapper-13 flex">
+              <div className="checkbox-wrapper-13 flex">
                 <input
                   type="checkbox"
                   checked={showName}
                   onChange={handleNameDisplay}
                 />
-                <label for="c1-13"> Show Name</label>
+                <label htmlFor="c1-13"> Show Name</label>
               </div>
             </div>
             {!staffDraw ?

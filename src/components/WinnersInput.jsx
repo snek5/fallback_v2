@@ -3,7 +3,7 @@ import React from "react";
 const WinnersInput = ({ label, value, onChange }) => {
     return (
         <>
-            <div id="winner-input" class="w-full mb-2 mt-2">
+            <div id="winner-input" className="w-full mb-2 mt-2">
                 <label
                     className="block mb-1 text-sm font-medium text-gray-900 dark:text-white justify-center items-center text-center">
                     {label}

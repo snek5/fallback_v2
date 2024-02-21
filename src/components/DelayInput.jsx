@@ -3,7 +3,7 @@ import React from "react";
 const DelayInput = ({ value, onChange }) => {
     return (
         <>
-            <div id="delay-input" class="w-full mb-2 mt-2">
+            <div id="delay-input" className="w-full mb-2 mt-2">
                 <label className="block mb-1 text-sm font-medium text-gray-900 dark:text-white justify-center items-center text-center">
                     Delay Between Lines (in Seconds):
                 </label>
